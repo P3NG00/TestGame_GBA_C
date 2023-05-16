@@ -41,17 +41,23 @@ void FillScreen(u16 color)
     }
 }
 
-// draws a square at x, y with size and color
-void DrawSquare(u16 x, u16 y, u16 size, u16 color)
+// draws a rectangle at x, y with width, height, and color
+void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color)
 {
     int i, j;
-    for (i = 0; i < size; i++)
+    for (i = 0; i < height; i++)
     {
-        for (j = 0; j < size; j++)
+        for (j = 0; j < width; j++)
         {
             VideoBuffer[((y + i) * SCREEN_HEIGHT) + (x + j)] = color;
         }
     }
+}
+
+// draws a square at x, y with size and color
+void DrawSquare(u16 x, u16 y, u16 size, u16 color)
+{
+    DrawRectangle(x, y, size, size, color);
 }
 
 // returns if certain key is held
