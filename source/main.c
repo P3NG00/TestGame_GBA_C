@@ -1,26 +1,11 @@
 #include <gba.h>
-#include "constants.h"
+#include "util.h"
 #include "functions.h"
+#include "keypad.h"
 
-#define COLOR_BLACK RGB5(0,   0,  0)
-#define COLOR_WHITE RGB5(31, 31, 31)
-#define COLOR_RED	RGB5(31,  0,  0)
-
-// player info
-typedef struct Player
-{
-	// player coordinates
-	u16 x, y;
-	// player size
-	u16 size;
-	// player facing direction
-	// 0 = Up
-	// 1 = Right
-	// 2 = Down
-	// 3 = Left
-	u8 facing;
-} Player;
+// player
 Player player = { .x = DRAW_WIDTH / 2, .y = DRAW_HEIGHT / 2, .size = 4, .facing = 0, };
+bool playerColor = false;
 
 // function declarataions
 void DrawGame();
@@ -42,14 +27,14 @@ int main()
     {
 		// wait for vblank to complete
 		WaitVBlank();
+		// handle input
+		HandleInput();
 		// swap buffers
 		SwapBuffers();
 		// clear screen
 		FillScreen(COLOR_BLACK);
 		// draw game
 		DrawGame();
-		// handle input
-		HandleInput();
     }
 }
 
@@ -59,10 +44,12 @@ void DrawGame()
 	u16 playerSizeHalf = player.size / 2;
 	u16 drawX = player.x - playerSizeHalf;
 	u16 drawY = player.y - playerSizeHalf;
-	DrawSquare(drawX, drawY, player.size, COLOR_WHITE);
+	u16 playerColor0 = playerColor ? COLOR_WHITE : COLOR_RED;
+	DrawSquare(drawX, drawY, player.size, playerColor0);
 	// draw facing direction
 	u16 drawFacingHeight = 0;
 	u16 drawFacingWidth = 0;
+	// TODO make red box into 2x2 white square
 	switch (player.facing)
 	{
 		// Up
@@ -124,4 +111,11 @@ void HandleInput()
 		player.x++;
 		player.facing = 1;
 	}
+	// handle other input
+	if (KeyPressed(KEY_SELECT))
+	{
+		playerColor = !playerColor;
+	}
+	// update keypad key tracking
+	UpdateKeys();
 }

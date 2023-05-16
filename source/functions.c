@@ -1,5 +1,5 @@
 #include <gba.h>
-#include "constants.h"
+#include "util.h"
 
 // globals
 u16 *VideoBuffer; // location we are currently drawing to, flips between front and back buffer
@@ -7,17 +7,17 @@ u16 *VideoBuffer; // location we are currently drawing to, flips between front a
 // this swaps the locations of the current display and current writing location
 void SwapBuffers()
 {
-    //backbuffer is being displayed so swap
+    // backbuffer is being displayed so swap
 	if (REG_DISPCNT & BACKBUFFER)
 	{
-		REG_DISPCNT &= ~BACKBUFFER;	//make display show the frontbuffer (remove backbuffer using it's bitwise compliement)
-		VideoBuffer = (u16*)MODE5_BB; //make backbuffer the one we draw to
+		REG_DISPCNT &= ~BACKBUFFER;	// make display show the frontbuffer (remove backbuffer using it's bitwise compliement)
+		VideoBuffer = (u16*)MODE5_BB; // make backbuffer the one we draw to
 	}
     // else frontbuffer is being displayed so swap
 	else
 	{
-		REG_DISPCNT |= BACKBUFFER; //make display show the backbuffer (add backbuffer)
-		VideoBuffer = (u16*)VRAM; //make frontbuffer the one we draw to
+		REG_DISPCNT |= BACKBUFFER; // make display show the backbuffer (add backbuffer)
+		VideoBuffer = (u16*)VRAM; // make frontbuffer the one we draw to
 	}
 }
 
@@ -58,10 +58,4 @@ void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color)
 void DrawSquare(u16 x, u16 y, u16 size, u16 color)
 {
     DrawRectangle(x, y, size, size, color);
-}
-
-// returns if certain key is held
-bool KeyHeld(u16 key)
-{
-    return ~REG_KEYINPUT & key;
 }
