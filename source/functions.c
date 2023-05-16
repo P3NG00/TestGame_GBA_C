@@ -11,13 +11,13 @@ void SwapBuffers()
 	if (REG_DISPCNT & BACKBUFFER)
 	{
 		REG_DISPCNT &= ~BACKBUFFER;	//make display show the frontbuffer (remove backbuffer using it's bitwise compliement)
-		VideoBuffer = (unsigned short*)MODE5_BB; //make backbuffer the one we draw to
+		VideoBuffer = (u16*)MODE5_BB; //make backbuffer the one we draw to
 	}
     // else frontbuffer is being displayed so swap
 	else
 	{
 		REG_DISPCNT |= BACKBUFFER; //make display show the backbuffer (add backbuffer)
-		VideoBuffer = (unsigned short*)VRAM; //make frontbuffer the one we draw to
+		VideoBuffer = (u16*)VRAM; //make frontbuffer the one we draw to
 	}
 }
 

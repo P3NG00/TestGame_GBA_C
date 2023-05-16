@@ -20,7 +20,7 @@ int main()
 	// set screen mode 5, enable bkg2 for 16bit buffer
 	REG_DISPCNT = (MODE_5 | BG2_ENABLE);
 	// make backbuffer the first one we draw to while frontbuffer is displayed
-	VideoBuffer = (u16*)MODE5_BB;
+	VideoBuffer = *MODE5_BB;
     // scale small mode 5 screen to full screen
     REG_BG2PA = 256 / 2;
     REG_BG2PD = 256 / 2;
