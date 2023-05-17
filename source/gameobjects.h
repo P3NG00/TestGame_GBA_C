@@ -3,18 +3,18 @@
 
 #include <gba.h>
 
-typedef struct Position
+typedef struct Vector2
 {
 	// coordinates
 	s16 x, y;
-} Position;
+} Vector2;
 
 typedef struct GameObject
 {
 	// stores whether the game object is active
 	bool active;
 	// game object position
-	Position position;
+	Vector2 position;
 	// size
 	u16 width, height;
 	// color
@@ -25,11 +25,7 @@ typedef struct Player
 {
 	GameObject gameObject;
 	// player facing direction
-	// 0 = Up
-	// 1 = Right
-	// 2 = Down
-	// 3 = Left
-	u8 facing;
+	Vector2 facing;
 } Player;
 
 typedef struct Projectile

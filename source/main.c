@@ -45,7 +45,10 @@ Player player = {
 		.height = PLAYER_SIZE,
 		.color = COLOR_WHITE
 	},
-	.facing = 0
+	.facing = {
+		.x = 0,
+		.y = 0
+	}
 };
 GameObject playerTestObject = {
 	.active = true,
@@ -132,41 +135,37 @@ void DrawGame()
 	// draw facing direction
 	u16 playerHalfWidth = PLAYER_SIZE / 2;
 	u16 offset = playerHalfWidth + 1;
-	u16 drawX = player.gameObject.position.x;
-	u16 drawY = player.gameObject.position.y;
-	switch (player.facing)
-	{
-		case 0 : drawY -= offset; break; // Up
-		case 1 : drawX += offset; break; // Right
-		case 2 : drawY += offset; break; // Down
-		case 3 : drawX -= offset; break; // Left
-	}
+	u16 drawX = player.gameObject.position.x + (player.facing.x * offset);
+	u16 drawY = player.gameObject.position.y + (player.facing.y * offset);
 	DrawSquareCentered(drawX, drawY, playerHalfWidth, COLOR_WHITE);
 }
 
 void HandleInput()
 {
 	playerTestObject.position = player.gameObject.position;
+	// TODO store player's last facing direction if it's going to be set to 0, 0
+	player.facing.x = 0;
+	player.facing.y = 0;
 	// handle movement input
 	if (KeyHeld(KEY_UP))
 	{
 		playerTestObject.position.y--;
-		player.facing = 0;
+		player.facing.y--;
 	}
 	if (KeyHeld(KEY_DOWN))
 	{
 		playerTestObject.position.y++;
-		player.facing = 2;
+		player.facing.y++;
 	}
 	if (KeyHeld(KEY_LEFT))
 	{
 		playerTestObject.position.x--;
-		player.facing = 3;
+		player.facing.x--;
 	}
 	if (KeyHeld(KEY_RIGHT))
 	{
 		playerTestObject.position.x++;
-		player.facing = 1;
+		player.facing.x++;
 	}
 	// handle shooting input
 	if (KeyPressed(KEY_A))
@@ -175,16 +174,9 @@ void HandleInput()
 		{
 			if (!projectiles[i].gameObject.active)
 			{
-				s16 dx = 0;
-				s16 dy = 0;
+				s16 dx = player.facing.x;
+				s16 dy = player.facing.y;
 				s16 offset = PLAYER_SIZE / 2;
-				switch (player.facing)
-				{
-					case 0 : dy--; break; // Up
-					case 1 : dx++; break; // Right
-					case 2 : dy++; break; // Down
-					case 3 : dx--; break; // Left
-				}
 				projectiles[i] = (Projectile) {
 					.gameObject = {
 						.active = true,
