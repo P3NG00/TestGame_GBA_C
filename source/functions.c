@@ -1,8 +1,9 @@
 #include <gba.h>
+#include "camera.h"
 #include "util.h"
 
 // globals
-u16 *VideoBuffer; // location we are currently drawing to, flips between front and back buffer
+u16* VideoBuffer = (u16*)MODE5_BB;; // location we are currently drawing to, flips between front and back buffer, starting on backbuffer
 
 // function declarations
 void SwapBuffers();
@@ -55,11 +56,14 @@ void FillScreen(u16 color)
 void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color)
 {
     int i, j;
+    s16 drawX, drawY;
     for (i = 0; i < height; i++)
     {
         for (j = 0; j < width; j++)
         {
-            VideoBuffer[((y + i) * SCREEN_HEIGHT) + (x + j)] = color;
+            drawX = (x + j) - camera_x;
+            drawY = (y + i) - camera_y;
+            VideoBuffer[(drawY * SCREEN_HEIGHT) + drawX] = color;
         }
     }
 }

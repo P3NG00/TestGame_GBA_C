@@ -1,4 +1,5 @@
 #include <gba.h>
+#include "camera.h"
 #include "functions.h"
 #include "keypad.h"
 #include "util.h"
@@ -6,8 +7,8 @@
 // player
 Player player = {
 	.gameObject = {
-		.x = DRAW_WIDTH / 2,
-		.y = DRAW_HEIGHT / 2,
+		.x = 0,
+		.y = 0,
 		.width = 4,
 		.height = 4,
 		.color = COLOR_WHITE
@@ -17,8 +18,8 @@ Player player = {
 
 // test wall
 GameObject wall = {
-	.x = DRAW_WIDTH / 4,
-	.y = DRAW_HEIGHT / 2,
+	.x = -15,
+	.y = 0,
 	.width = 4,
 	.height = 24,
 	.color = COLOR_WHITE
@@ -33,8 +34,6 @@ int main()
 {
 	// set screen mode 5, enable bkg2 for 16bit buffer
 	REG_DISPCNT = (MODE_5 | BG2_ENABLE);
-	// make backbuffer the first one we draw to while frontbuffer is displayed
-	VideoBuffer = (u16*)MODE5_BB;
     // scale small mode 5 screen to full screen
     REG_BG2PA = 256 / 2;
     REG_BG2PD = 256 / 2;
@@ -42,6 +41,8 @@ int main()
 	// game loop
     while (true)
     {
+		// update camera offset
+		UpdateCameraOffset(&player.gameObject);
 		// wait for vblank to complete
 		WaitVBlank();
 		// handle input
@@ -78,23 +79,22 @@ void DrawGame()
 void HandleInput()
 {
 	// handle movement input
-	u16 playerSizeHalf = player.gameObject.width / 2;
-	if (KeyHeld(KEY_UP) && player.gameObject.y > playerSizeHalf)
+	if (KeyHeld(KEY_UP))
 	{
 		player.gameObject.y--;
 		player.facing = 0;
 	}
-	if (KeyHeld(KEY_DOWN) && player.gameObject.y < DRAW_HEIGHT - playerSizeHalf)
+	if (KeyHeld(KEY_DOWN))
 	{
 		player.gameObject.y++;
 		player.facing = 2;
 	}
-	if (KeyHeld(KEY_LEFT) && player.gameObject.x > playerSizeHalf)
+	if (KeyHeld(KEY_LEFT))
 	{
 		player.gameObject.x--;
 		player.facing = 3;
 	}
-	if (KeyHeld(KEY_RIGHT) && player.gameObject.x < DRAW_WIDTH - playerSizeHalf)
+	if (KeyHeld(KEY_RIGHT))
 	{
 		player.gameObject.x++;
 		player.facing = 1;

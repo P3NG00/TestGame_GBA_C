@@ -1,7 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <gba_video.h>
+#include <gba.h>
 
 #define COLOR_BLACK RGB5(0,   0,  0)
 #define COLOR_WHITE RGB5(31, 31, 31)
@@ -12,7 +12,7 @@
 typedef struct GameObject
 {
 	// coordinates
-	u16 x, y;
+	s16 x, y;
 	// size
 	u16 width, height;
 	// color
