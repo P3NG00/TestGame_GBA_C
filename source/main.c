@@ -16,21 +16,41 @@ GameObject walls[] = {
 	{
 		.active = true,
 		.position = {
-			.x = -12,
+			.x = -54,
 			.y =   0
 		},
-		.width  =  4,
-		.height = 24,
+		.width  =  2,
+		.height = 60,
+		.color = COLOR_WHITE
+	},
+	{
+		.active = true,
+		.position = {
+			.x = 54,
+			.y = 0
+		},
+		.width  =  2,
+		.height = 60,
 		.color = COLOR_WHITE
 	},
 	{
 		.active = true,
 		.position = {
 			.x =   0,
-			.y = -24
+			.y = -31
 		},
-		.width  = 30,
-		.height =  4,
+		.width  = 110,
+		.height =   2,
+		.color = COLOR_WHITE
+	},
+	{
+		.active = true,
+		.position = {
+			.x =  0,
+			.y = 31
+		},
+		.width  = 110,
+		.height =   2,
 		.color = COLOR_WHITE
 	}
 };

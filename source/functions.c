@@ -96,6 +96,12 @@ void DrawGameObject(GameObject* gameObject)
 {
     if (!gameObject->active)
         return;
+    // check if game object is visible in camera
+    if (gameObject->position.x + (gameObject->width  / 2) < camera_x              ||
+        gameObject->position.x - (gameObject->width  / 2) > camera_x + DRAW_WIDTH ||
+        gameObject->position.y + (gameObject->height / 2) < camera_y              ||
+        gameObject->position.y - (gameObject->height / 2) > camera_y + DRAW_HEIGHT)
+        return;
     DrawRectangleCentered(gameObject->position.x, gameObject->position.y, gameObject->width, gameObject->height, gameObject->color);
 }
 
