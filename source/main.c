@@ -6,6 +6,7 @@
 #include "util.h"
 
 #define PROJECTILE_LIMIT 16
+#define PROJECTILE_SPEED  3
 
 // player
 Player player = {
@@ -89,8 +90,8 @@ void UpdateGameObjects()
 				continue;
 			}
 			// update projectile position
-			projectile->gameObject.x += projectile->dx * projectile->speed;
-			projectile->gameObject.y += projectile->dy * projectile->speed;
+			projectile->gameObject.x += projectile->dx;
+			projectile->gameObject.y += projectile->dy;
 		}
 	}
 }
@@ -152,6 +153,7 @@ void HandleInput()
 			{
 				s16 dx = 0;
 				s16 dy = 0;
+				s16 offset = (player.gameObject.width / 2) + 1;
 				switch (player.facing)
 				{
 					case 0 : dy--; break; // Up
@@ -162,16 +164,15 @@ void HandleInput()
 				projectiles[i] = (Projectile) {
 					.gameObject = {
 						.active = true,
-						.x = player.gameObject.x,
-						.y = player.gameObject.y,
+						.x = player.gameObject.x + (dx * offset),
+						.y = player.gameObject.y + (dy * offset),
 						.width =  2,
 						.height = 2,
 						.color = COLOR_WHITE
 					},
-					.dx = dx,
-					.dy = dy,
-					.life = 60,
-					.speed = 3
+					.dx = dx * PROJECTILE_SPEED,
+					.dy = dy * PROJECTILE_SPEED,
+					.life = 60
 				};
 				break;
 			}

@@ -33,8 +33,6 @@ typedef struct Projectile
 	s16 dx, dy;
 	// projectile life
 	u8 life;
-	// projectile speed
-	s8 speed;
 } Projectile;
 
 #endif
