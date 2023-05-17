@@ -47,7 +47,7 @@ Player player = {
 	},
 	.facing = {
 		.x = 0,
-		.y = 0
+		.y = 1
 	}
 };
 GameObject playerTestObjectX = {
@@ -155,30 +155,37 @@ void HandleInput()
 {
 	playerTestObjectX.position = player.gameObject.position;
 	playerTestObjectY.position = player.gameObject.position;
-	// TODO store player's last facing direction if it's going to be set to 0, 0
+	Vector2 lastFacing = player.facing;
 	player.facing.x = 0;
 	player.facing.y = 0;
 	// handle movement input
+	bool leftShoulderHeld = KeyHeld(KEY_L);
 	if (KeyHeld(KEY_UP))
 	{
-		playerTestObjectY.position.y--;
+		if (!leftShoulderHeld)
+			playerTestObjectY.position.y--;
 		player.facing.y--;
 	}
 	if (KeyHeld(KEY_DOWN))
 	{
-		playerTestObjectY.position.y++;
+		if (!leftShoulderHeld)
+			playerTestObjectY.position.y++;
 		player.facing.y++;
 	}
 	if (KeyHeld(KEY_LEFT))
 	{
-		playerTestObjectX.position.x--;
+		if (!leftShoulderHeld)
+			playerTestObjectX.position.x--;
 		player.facing.x--;
 	}
 	if (KeyHeld(KEY_RIGHT))
 	{
-		playerTestObjectX.position.x++;
+		if (!leftShoulderHeld)
+			playerTestObjectX.position.x++;
 		player.facing.x++;
 	}
+	if (player.facing.x == 0 && player.facing.y == 0)
+		player.facing = lastFacing;
 	// handle shooting input
 	if (KeyPressed(KEY_A))
 	{
