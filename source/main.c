@@ -76,9 +76,6 @@ int main()
 	for (int i = 0; i < PROJECTILE_LIMIT; i++)
 		projectiles[i] = (Projectile) { .gameObject = { .active = false } };
 
-	// update camera offset
-	UpdateCameraOffset(&player.gameObject);
-
 	// game loop
     while (true)
     {
