@@ -63,6 +63,8 @@ void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color)
         {
             drawX = (x + j) - camera_x;
             drawY = (y + i) - camera_y;
+            if (drawX < 0 || drawX >= DRAW_WIDTH || drawY < 0 || drawY >= DRAW_HEIGHT)
+                continue;
             VideoBuffer[(drawY * SCREEN_HEIGHT) + drawX] = color;
         }
     }
