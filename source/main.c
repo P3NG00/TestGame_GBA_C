@@ -50,7 +50,7 @@ Player player = {
 		.y = 0
 	}
 };
-GameObject playerTestObject = {
+GameObject playerTestObjectX = {
 	.active = true,
 	.position = {
 		.x = 0,
@@ -58,6 +58,15 @@ GameObject playerTestObject = {
 	},
 	.width = PLAYER_SIZE,
 	.height = PLAYER_SIZE,
+};
+GameObject playerTestObjectY = {
+	.active = true,
+	.position = {
+		.x = 0,
+		.y = 0
+	},
+	.width = PLAYER_SIZE,
+	.height = PLAYER_SIZE
 };
 
 // function declarataions
@@ -142,29 +151,30 @@ void DrawGame()
 
 void HandleInput()
 {
-	playerTestObject.position = player.gameObject.position;
+	playerTestObjectX.position = player.gameObject.position;
+	playerTestObjectY.position = player.gameObject.position;
 	// TODO store player's last facing direction if it's going to be set to 0, 0
 	player.facing.x = 0;
 	player.facing.y = 0;
 	// handle movement input
 	if (KeyHeld(KEY_UP))
 	{
-		playerTestObject.position.y--;
+		playerTestObjectY.position.y--;
 		player.facing.y--;
 	}
 	if (KeyHeld(KEY_DOWN))
 	{
-		playerTestObject.position.y++;
+		playerTestObjectY.position.y++;
 		player.facing.y++;
 	}
 	if (KeyHeld(KEY_LEFT))
 	{
-		playerTestObject.position.x--;
+		playerTestObjectX.position.x--;
 		player.facing.x--;
 	}
 	if (KeyHeld(KEY_RIGHT))
 	{
-		playerTestObject.position.x++;
+		playerTestObjectX.position.x++;
 		player.facing.x++;
 	}
 	// handle shooting input
@@ -202,7 +212,8 @@ void HandleInput()
 
 void HandleCollision()
 {
-	bool playerCollided = false;
+	bool playerCollidedX = false;
+	bool playerCollidedY = false;
 	Projectile* projectile;
 	GameObject* wall;
 	// iterate through walls checking projectile and player collisions
@@ -219,10 +230,13 @@ void HandleCollision()
 				projectile->gameObject.active = false;
 		}
 		// wall collision with player
-		if (!playerCollided && ObjectsCollided(wall, &playerTestObject))
-			playerCollided = true;
+		if (!playerCollidedX && ObjectsCollided(wall, &playerTestObjectX))
+			playerCollidedX = true;
+		if (!playerCollidedY && ObjectsCollided(wall, &playerTestObjectY))
+			playerCollidedY = true;
 	}
-	if (playerCollided)
-		return;
-	player.gameObject.position = playerTestObject.position;
+	if (!playerCollidedX)
+		player.gameObject.position.x = playerTestObjectX.position.x;
+	if (!playerCollidedY)
+		player.gameObject.position.y = playerTestObjectY.position.y;
 }
