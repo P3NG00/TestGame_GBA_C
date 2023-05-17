@@ -1,4 +1,5 @@
 #include <gba.h>
+#include "gameobjects.h"
 #include "util.h"
 
 extern u16* VideoBuffer;

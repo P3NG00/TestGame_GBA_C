@@ -1,5 +1,6 @@
 #include <gba.h>
 #include "camera.h"
+#include "gameobjects.h"
 #include "util.h"
 
 // globals
@@ -93,5 +94,7 @@ void DrawSquareCentered(u16 x, u16 y, u16 size, u16 color)
 // draws a gameobject using it's x, y, width, height, and color
 void DrawGameObject(GameObject* gameObject)
 {
+    if (!gameObject->active)
+        return;
     DrawRectangleCentered(gameObject->x, gameObject->y, gameObject->width, gameObject->height, gameObject->color);
 }
