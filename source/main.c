@@ -17,20 +17,20 @@ GameObject walls[] = {
 		.active = true,
 		.position = {
 			.x = -12,
-			.y = 0
+			.y =   0
 		},
-		.width = 4,
+		.width  =  4,
 		.height = 24,
 		.color = COLOR_WHITE
 	},
 	{
 		.active = true,
 		.position = {
-			.x = 0,
+			.x =   0,
 			.y = -24
 		},
-		.width = 30,
-		.height = 4,
+		.width  = 30,
+		.height =  4,
 		.color = COLOR_WHITE
 	}
 };
@@ -41,7 +41,7 @@ Player player = {
 			.x = 0,
 			.y = 0
 		},
-		.width = PLAYER_SIZE,
+		.width  = PLAYER_SIZE,
 		.height = PLAYER_SIZE,
 		.color = COLOR_WHITE
 	},
@@ -56,7 +56,7 @@ GameObject playerTestObjectX = {
 		.x = 0,
 		.y = 0
 	},
-	.width = PLAYER_SIZE,
+	.width  = PLAYER_SIZE,
 	.height = PLAYER_SIZE,
 };
 GameObject playerTestObjectY = {
@@ -65,7 +65,7 @@ GameObject playerTestObjectY = {
 		.x = 0,
 		.y = 0
 	},
-	.width = PLAYER_SIZE,
+	.width  = PLAYER_SIZE,
 	.height = PLAYER_SIZE
 };
 
@@ -194,7 +194,7 @@ void HandleInput()
 							.x = player.gameObject.position.x + (dx * offset),
 							.y = player.gameObject.position.y + (dy * offset)
 						},
-						.width =  2,
+						.width  = 2,
 						.height = 2,
 						.color = COLOR_WHITE
 					},

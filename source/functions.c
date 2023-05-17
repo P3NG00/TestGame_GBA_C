@@ -37,7 +37,7 @@ void SwapBuffers()
 void WaitVBlank()
 {
     while (REG_VCOUNT >= 160) {}
-    while (REG_VCOUNT < 160) {}
+    while (REG_VCOUNT <  160) {}
 }
 
 // fills the screen pixels
@@ -80,7 +80,7 @@ void DrawSquare(u16 x, u16 y, u16 size, u16 color)
 // draws a rectangle centered at x, y with width, height, and color
 void DrawRectangleCentered(u16 x, u16 y, u16 width, u16 height, u16 color)
 {
-    u16 drawX = x - (width / 2);
+    u16 drawX = x - (width  / 2);
     u16 drawY = y - (height / 2);
     DrawRectangle(drawX, drawY, width, height, color);
 }
