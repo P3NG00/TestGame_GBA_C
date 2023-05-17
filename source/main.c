@@ -5,7 +5,7 @@
 #include "keypad.h"
 #include "util.h"
 
-#define PROJECTILE_LIMIT 8 // TODO increase projectile limit
+#define PROJECTILE_LIMIT 16
 
 // player
 Player player = {
@@ -36,6 +36,7 @@ Projectile projectiles[PROJECTILE_LIMIT];
 // function declarataions
 void DrawGame();
 void HandleInput();
+void UpdateGameObjects();
 
 // main code entry point
 int main()
@@ -50,26 +51,54 @@ int main()
 	for (int i = 0; i < PROJECTILE_LIMIT; i++)
 		projectiles[i] = (Projectile) { .gameObject = { .active = false } };
 
+	// update camera offset
+	UpdateCameraOffset(&player.gameObject);
+
 	// game loop
     while (true)
     {
-		// update camera offset
-		UpdateCameraOffset(&player.gameObject);
 		// wait for vblank to complete
 		WaitVBlank();
-		// handle input
-		HandleInput();
 		// swap buffers
 		SwapBuffers();
-		// clear screen
-		FillScreen(COLOR_BLACK);
+		// update camera offset
+		UpdateCameraOffset(&player.gameObject);
+		// handle input
+		HandleInput();
+		// update game objects
+		UpdateGameObjects();
 		// draw game
 		DrawGame();
     }
 }
 
+void UpdateGameObjects()
+{
+	Projectile* projectile;
+	// update projectiles
+	for (int i = 0; i < PROJECTILE_LIMIT; i++)
+	{
+		projectile = &projectiles[i];
+		if (projectile->gameObject.active)
+		{
+			// update projectile life
+			projectile->life--;
+			if (projectile->life == 0)
+			{
+				projectile->gameObject.active = false;
+				continue;
+			}
+			// update projectile position
+			projectile->gameObject.x += projectile->dx * projectile->speed;
+			projectile->gameObject.y += projectile->dy * projectile->speed;
+		}
+	}
+}
+
 void DrawGame()
 {
+	// clear screen
+	FillScreen(COLOR_BLACK);
 	// draw wall
 	DrawGameObject(&wall);
 	// draw player
@@ -125,22 +154,24 @@ void HandleInput()
 				s16 dy = 0;
 				switch (player.facing)
 				{
-					case 0 : dy = -1; break; // Up
-					case 1 : dx = 1; break; // Right
-					case 2 : dy = 1; break; // Down
-					case 3 : dx = -1; break; // Left
+					case 0 : dy--; break; // Up
+					case 1 : dx++; break; // Right
+					case 2 : dy++; break; // Down
+					case 3 : dx--; break; // Left
 				}
 				projectiles[i] = (Projectile) {
 					.gameObject = {
 						.active = true,
 						.x = player.gameObject.x,
 						.y = player.gameObject.y,
-						.width = 1,
-						.height = 1,
+						.width =  2,
+						.height = 2,
 						.color = COLOR_WHITE
 					},
 					.dx = dx,
-					.dy = dy
+					.dy = dy,
+					.life = 60,
+					.speed = 3
 				};
 				break;
 			}
