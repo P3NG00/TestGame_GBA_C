@@ -143,7 +143,9 @@ void DrawGame()
 	DrawGameObject(&player.gameObject);
 	// draw facing direction
 	u16 playerHalfWidth = PLAYER_SIZE / 2;
-	u16 offset = playerHalfWidth + 1;
+	u16 offset = playerHalfWidth;
+	if (player.facing.x == 0 || player.facing.y == 0)
+		offset++;
 	u16 drawX = player.gameObject.position.x + (player.facing.x * offset);
 	u16 drawY = player.gameObject.position.y + (player.facing.y * offset);
 	DrawSquareCentered(drawX, drawY, playerHalfWidth, COLOR_WHITE);
