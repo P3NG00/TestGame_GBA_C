@@ -104,10 +104,8 @@ bool ObjectsCollided(GameObject* gameObject0, GameObject* gameObject1)
 {
     if (!gameObject0->active || !gameObject1->active)
         return false;
-    if (gameObject0->position.x - (gameObject0->width / 2) < gameObject1->position.x + (gameObject1->width / 2) &&
-        gameObject0->position.x + (gameObject0->width / 2) > gameObject1->position.x - (gameObject1->width / 2) &&
-        gameObject0->position.y - (gameObject0->height / 2) < gameObject1->position.y + (gameObject1->height / 2) &&
-        gameObject0->position.y + (gameObject0->height / 2) > gameObject1->position.y - (gameObject1->height / 2))
-        return true;
-    return false;
+    return gameObject0->position.x - (gameObject0->width  / 2) < gameObject1->position.x + (gameObject1->width  / 2) &&
+           gameObject0->position.x + (gameObject0->width  / 2) > gameObject1->position.x - (gameObject1->width  / 2) &&
+           gameObject0->position.y - (gameObject0->height / 2) < gameObject1->position.y + (gameObject1->height / 2) &&
+           gameObject0->position.y + (gameObject0->height / 2) > gameObject1->position.y - (gameObject1->height / 2);
 }

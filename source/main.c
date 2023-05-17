@@ -8,17 +8,29 @@
 #define PROJECTILE_LIMIT 16
 #define PROJECTILE_SPEED  3
 
+#define PLAYER_SIZE 4
+
 // game obejcts
 Projectile projectiles[PROJECTILE_LIMIT];
 GameObject walls[] = {
 	{
 		.active = true,
 		.position = {
-			.x = -15,
+			.x = -12,
 			.y = 0
 		},
 		.width = 4,
 		.height = 24,
+		.color = COLOR_WHITE
+	},
+	{
+		.active = true,
+		.position = {
+			.x = 0,
+			.y = -24
+		},
+		.width = 30,
+		.height = 4,
 		.color = COLOR_WHITE
 	}
 };
@@ -29,11 +41,20 @@ Player player = {
 			.x = 0,
 			.y = 0
 		},
-		.width = 4,
-		.height = 4,
+		.width = PLAYER_SIZE,
+		.height = PLAYER_SIZE,
 		.color = COLOR_WHITE
 	},
 	.facing = 0
+};
+GameObject playerTestObject = {
+	.active = true,
+	.position = {
+		.x = 0,
+		.y = 0
+	},
+	.width = PLAYER_SIZE,
+	.height = PLAYER_SIZE,
 };
 
 // function declarataions
@@ -85,19 +106,17 @@ void UpdateGameObjects()
 	for (int i = 0; i < PROJECTILE_LIMIT; i++)
 	{
 		projectile = &projectiles[i];
-		if (projectile->gameObject.active)
+		if (!projectile->gameObject.active)
+			continue;
+		// update projectile life
+		if (--projectile->life == 0)
 		{
-			// update projectile life
-			projectile->life--;
-			if (projectile->life == 0)
-			{
-				projectile->gameObject.active = false;
-				continue;
-			}
-			// update projectile position
-			projectile->gameObject.position.x += projectile->dx;
-			projectile->gameObject.position.y += projectile->dy;
+			projectile->gameObject.active = false;
+			continue;
 		}
+		// update projectile position
+		projectile->gameObject.position.x += projectile->dx;
+		projectile->gameObject.position.y += projectile->dy;
 	}
 }
 
@@ -108,13 +127,14 @@ void DrawGame()
 	// draw walls
 	for (int i = 0; i < sizeof(walls) / sizeof(GameObject); i++)
 		DrawGameObject(&walls[i]);
-	// draw player
-	DrawGameObject(&player.gameObject);
 	// draw projectiles
 	for (int i = 0; i < PROJECTILE_LIMIT; i++)
 		DrawGameObject(&projectiles[i].gameObject);
+	// draw player
+	DrawGameObject(&player.gameObject);
 	// draw facing direction
-	u16 offset = (player.gameObject.width / 2) + 1;
+	u16 playerHalfWidth = PLAYER_SIZE / 2;
+	u16 offset = playerHalfWidth + 1;
 	u16 drawX = player.gameObject.position.x;
 	u16 drawY = player.gameObject.position.y;
 	switch (player.facing)
@@ -124,30 +144,31 @@ void DrawGame()
 		case 2 : drawY += offset; break; // Down
 		case 3 : drawX -= offset; break; // Left
 	}
-	DrawSquareCentered(drawX, drawY, 2, COLOR_WHITE);
+	DrawSquareCentered(drawX, drawY, playerHalfWidth, COLOR_WHITE);
 }
 
 void HandleInput()
 {
+	playerTestObject.position = player.gameObject.position;
 	// handle movement input
 	if (KeyHeld(KEY_UP))
 	{
-		player.gameObject.position.y--;
+		playerTestObject.position.y--;
 		player.facing = 0;
 	}
 	if (KeyHeld(KEY_DOWN))
 	{
-		player.gameObject.position.y++;
+		playerTestObject.position.y++;
 		player.facing = 2;
 	}
 	if (KeyHeld(KEY_LEFT))
 	{
-		player.gameObject.position.x--;
+		playerTestObject.position.x--;
 		player.facing = 3;
 	}
 	if (KeyHeld(KEY_RIGHT))
 	{
-		player.gameObject.position.x++;
+		playerTestObject.position.x++;
 		player.facing = 1;
 	}
 	// handle shooting input
@@ -159,7 +180,7 @@ void HandleInput()
 			{
 				s16 dx = 0;
 				s16 dy = 0;
-				s16 offset = player.gameObject.width / 2;
+				s16 offset = PLAYER_SIZE / 2;
 				switch (player.facing)
 				{
 					case 0 : dy--; break; // Up
@@ -192,23 +213,27 @@ void HandleInput()
 
 void HandleCollision()
 {
+	bool playerCollided = false;
 	Projectile* projectile;
+	GameObject* wall;
 	// iterate through walls checking projectile and player collisions
 	for (int i = 0; i < sizeof(walls) / sizeof(GameObject); i++)
 	{
+		wall = &walls[i];
 		// wall collision with projectile
 		for (int j = 0; j < PROJECTILE_LIMIT; j++)
 		{
 			projectile = &projectiles[j];
 			if (!projectile->gameObject.active)
 				continue;
-			if (ObjectsCollided(&walls[i], &projectile->gameObject))
+			if (ObjectsCollided(wall, &projectile->gameObject))
 				projectile->gameObject.active = false;
 		}
 		// wall collision with player
-		if (ObjectsCollided(&walls[i], &player.gameObject))
-		{
-			// TODO
-		}
+		if (!playerCollided && ObjectsCollided(wall, &playerTestObject))
+			playerCollided = true;
 	}
+	if (playerCollided)
+		return;
+	player.gameObject.position = playerTestObject.position;
 }
