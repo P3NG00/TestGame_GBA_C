@@ -1,4 +1,5 @@
 #include <gba.h>
+#include "util.h"
 
 extern u16* VideoBuffer;
 
@@ -9,3 +10,4 @@ void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color);
 void DrawSquare(u16 x, u16 y, u16 size, u16 color);
 void DrawRectangleCentered(u16 x, u16 y, u16 width, u16 height, u16 color);
 void DrawSquareCentered(u16 x, u16 y, u16 size, u16 color);
+void DrawGameObject(GameObject* gameObject);

@@ -1,10 +1,28 @@
 #include <gba.h>
-#include "util.h"
 #include "functions.h"
 #include "keypad.h"
+#include "util.h"
 
 // player
-Player player = { .x = DRAW_WIDTH / 2, .y = DRAW_HEIGHT / 2, .size = 4, .facing = 0, };
+Player player = {
+	.gameObject = {
+		.x = DRAW_WIDTH / 2,
+		.y = DRAW_HEIGHT / 2,
+		.width = 4,
+		.height = 4,
+		.color = COLOR_WHITE
+	},
+	.facing = 0
+};
+
+// test wall
+GameObject wall = {
+	.x = DRAW_WIDTH / 4,
+	.y = DRAW_HEIGHT / 2,
+	.width = 4,
+	.height = 24,
+	.color = COLOR_WHITE
+};
 
 // function declarataions
 void DrawGame();
@@ -39,12 +57,14 @@ int main()
 
 void DrawGame()
 {
+	// draw wall
+	DrawGameObject(&wall);
 	// draw player
-	DrawSquareCentered(player.x, player.y, player.size, COLOR_WHITE);
+	DrawGameObject(&player.gameObject);
 	// draw facing direction
-	u16 offset = (player.size / 2) + 1;
-	u16 drawX = player.x;
-	u16 drawY = player.y;
+	u16 offset = (player.gameObject.width / 2) + 1;
+	u16 drawX = player.gameObject.x;
+	u16 drawY = player.gameObject.y;
 	switch (player.facing)
 	{
 		case 0 : drawY -= offset; break; // Up
@@ -58,27 +78,29 @@ void DrawGame()
 void HandleInput()
 {
 	// handle movement input
-	u16 playerSizeHalf = player.size / 2;
-	if (KeyHeld(KEY_UP) && player.y > playerSizeHalf)
+	u16 playerSizeHalf = player.gameObject.width / 2;
+	if (KeyHeld(KEY_UP) && player.gameObject.y > playerSizeHalf)
 	{
-		player.y--;
+		player.gameObject.y--;
 		player.facing = 0;
 	}
-	if (KeyHeld(KEY_DOWN) && player.y < DRAW_HEIGHT - playerSizeHalf)
+	if (KeyHeld(KEY_DOWN) && player.gameObject.y < DRAW_HEIGHT - playerSizeHalf)
 	{
-		player.y++;
+		player.gameObject.y++;
 		player.facing = 2;
 	}
-	if (KeyHeld(KEY_LEFT) && player.x > playerSizeHalf)
+	if (KeyHeld(KEY_LEFT) && player.gameObject.x > playerSizeHalf)
 	{
-		player.x--;
+		player.gameObject.x--;
 		player.facing = 3;
 	}
-	if (KeyHeld(KEY_RIGHT) && player.x < DRAW_WIDTH - playerSizeHalf)
+	if (KeyHeld(KEY_RIGHT) && player.gameObject.x < DRAW_WIDTH - playerSizeHalf)
 	{
-		player.x++;
+		player.gameObject.x++;
 		player.facing = 1;
 	}
+	// handle collision
+	// TODO
 	// update keypad key tracking
 	UpdateKeys();
 }

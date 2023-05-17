@@ -12,6 +12,7 @@ void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color);
 void DrawSquare(u16 x, u16 y, u16 size, u16 color);
 void DrawRectangleCentered(u16 x, u16 y, u16 width, u16 height, u16 color);
 void DrawSquareCentered(u16 x, u16 y, u16 size, u16 color);
+void DrawGameObject(GameObject* gameObject);
 
 // this swaps the locations of the current display and current writing location
 void SwapBuffers()
@@ -81,4 +82,10 @@ void DrawRectangleCentered(u16 x, u16 y, u16 width, u16 height, u16 color)
 void DrawSquareCentered(u16 x, u16 y, u16 size, u16 color)
 {
     DrawRectangleCentered(x, y, size, size, color);
+}
+
+// draws a gameobject using it's x, y, width, height, and color
+void DrawGameObject(GameObject* gameObject)
+{
+    DrawRectangleCentered(gameObject->x, gameObject->y, gameObject->width, gameObject->height, gameObject->color);
 }
