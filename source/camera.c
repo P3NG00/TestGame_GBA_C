@@ -7,6 +7,6 @@ s16 camera_y = 0;
 
 void UpdateCameraOffset(GameObject* gameObject)
 {
-    camera_x = gameObject->x - (DRAW_WIDTH / 2);
-    camera_y = gameObject->y - (DRAW_HEIGHT / 2);
+    camera_x = gameObject->position.x - (DRAW_WIDTH / 2);
+    camera_y = gameObject->position.y - (DRAW_HEIGHT / 2);
 }

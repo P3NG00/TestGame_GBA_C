@@ -3,12 +3,18 @@
 
 #include <gba.h>
 
+typedef struct Position
+{
+	// coordinates
+	s16 x, y;
+} Position;
+
 typedef struct GameObject
 {
 	// stores whether the game object is active
 	bool active;
-	// coordinates
-	s16 x, y;
+	// game object position
+	Position position;
 	// size
 	u16 width, height;
 	// color
