@@ -3,8 +3,10 @@
 #include "gameobjects.h"
 #include "util.h"
 
+#define LINE_SKIP 40
+
 // globals
-u16* VideoBuffer = (u16*)MODE5_BB;; // location we are currently drawing to, flips between front and back buffer, starting on backbuffer
+u16* VideoBuffer = (u16*)MODE5_BB; // location we are currently drawing to, flips between front and back buffer, starting on backbuffer
 
 // function declarations
 void SwapBuffers();
@@ -43,13 +45,16 @@ void WaitVBlank()
 // fills the screen pixels
 void FillScreen(u16 color)
 {
-    int x, y;
+    u8 x, y;
+    u16* drawPos = VideoBuffer;
     for (y = 0; y < DRAW_HEIGHT; y++)
     {
         for (x = 0; x < DRAW_WIDTH; x++)
         {
-            VideoBuffer[(y * SCREEN_HEIGHT) + x] = color;
+            *drawPos = color;
+            drawPos++;
         }
+        drawPos += LINE_SKIP;
     }
 }
 
@@ -58,6 +63,7 @@ void DrawRectangle(u16 x, u16 y, u16 width, u16 height, u16 color)
 {
     int i, j;
     s16 drawX, drawY;
+    // TODO optimize drawing
     for (i = 0; i < height; i++)
     {
         for (j = 0; j < width; j++)
